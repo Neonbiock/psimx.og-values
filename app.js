@@ -36,8 +36,9 @@ const defaultChanges = [
 // aren't in the game yet but the stat is ready for them once they land.
 const EXCLUSIVE_TIERS = ["Huges", "Exclusives", "Titanics"];
 
-let pets = JSON.parse(localStorage.getItem("psx_values_pets") || "null") || seedPets;
-let changes = JSON.parse(localStorage.getItem("psx_values_changes") || "null") || defaultChanges;
+// 1. Change these lines to only read your typed data arrays
+let pets = seedPets;
+let changes = defaultChanges;
 let currentRoute = location.hash.replace("#","") || "home";
 let currentPage = 1;
 const perPage = 12;
@@ -51,7 +52,7 @@ const fmt = (n) => {
   if (n >= 1e3) return (n/1e3).toFixed(2).replace(/\.00$/,"") + "K";
   return n.toLocaleString();
 };
-const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'''}[c]));
 const slugify = (s) => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
 
 function formatDate(d) {
@@ -66,9 +67,8 @@ function lastUpdatedLabel() {
   return formatDate(new Date(Math.max(...dates)));
 }
 
+// 2. Change this function so it only updates the footer text
 function save() {
-  localStorage.setItem("psx_values_pets", JSON.stringify(pets));
-  localStorage.setItem("psx_values_changes", JSON.stringify(changes));
   $("#footerUpdated").textContent = "Last updated " + lastUpdatedLabel();
 }
 save();
